@@ -9,6 +9,15 @@
  * @param {ListNode} head
  * @return {ListNode}
  */
-var swapPairs = function(head) {
-
+var swapPairs = function (head) {
+    var newHead = new ListNode(0, head), prev = newHead, next;
+    while (head && head.next) {
+        prev.next = head.next;
+        next = head.next;
+        head.next = next.next;
+        next.next = head;
+        prev = head;
+        head = head.next;
+    }
+    return newHead.next;
 };
