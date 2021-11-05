@@ -22,3 +22,16 @@ var postorder = function (root) {
     dfs(root);
     return result;
 };
+var postorder = function (root) {
+    if (!root) return [];
+    var result = [];
+    var stack = [root];
+    while (stack.length) {
+        var node = stack.pop();
+        result.unshift(node.val);
+        for (var n of node.children) {
+            stack.push(n);
+        }
+    }
+    return result;
+};
