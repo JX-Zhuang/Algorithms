@@ -10,6 +10,16 @@
  * @param {TreeNode} root
  * @return {number}
  */
- var minDepth = function(root) {
-
+var minDepth = function (root) {
+    var min = Number.MAX_SAFE_INTEGER;
+    var helper = function (node, level) {
+        if (!node) return 0;
+        if (!node.left && !node.right) {
+            min = Math.min(min, level + 1);
+        }
+        helper(node.left, level + 1);
+        helper(node.right, level + 1);
+        return min;
+    };
+    return helper(root, 0);
 };
