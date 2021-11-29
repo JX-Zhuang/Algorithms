@@ -15,7 +15,6 @@ var buildTree = function (preorder, inorder) {
     var l = preorder.length;
     var helper = function (preStart, preEnd, inStart, inEnd) {
         if (preEnd < preStart || inEnd < inStart) return null;
-        if (preStart < 0 || preEnd >= l || inStart < 0 || inEnd >= l) return null;
         var rootVal = preorder[preStart];
         var rootValIndexOfInorder = inorder.indexOf(rootVal);
         var nextPreEnd = preStart + (rootValIndexOfInorder - inStart);
