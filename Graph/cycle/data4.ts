@@ -3,8 +3,8 @@ const data: Data[] = [
     {
         "id": "5eb0d092-c039-43d4-a144-5d01be622eae",
         "data": {
-            "type": "START",
-            "name": "开始节点"
+            "type": "NODE",
+            "name": "name0"
         }
     },
     {

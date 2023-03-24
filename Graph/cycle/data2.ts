@@ -2,8 +2,6 @@ import { Data } from './type';
 const data: Data[] = [
     {
         id: '5eb0d092-c039-43d4-a144-5d01be622eae',
-        source: null,
-        target: null,
         data: {
             type: 'NODE',
             name: '开始节点'
@@ -54,7 +52,6 @@ const data: Data[] = [
         },
         data: {
             type: 'EDGE',
-            name: ''
         }
     },
     {
@@ -67,7 +64,6 @@ const data: Data[] = [
         },
         data: {
             type: 'EDGE',
-            name: 'a'
         }
     },
     {

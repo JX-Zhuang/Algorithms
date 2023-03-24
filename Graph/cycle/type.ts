@@ -17,7 +17,7 @@ export interface Edge {
 export interface Node {
     id: string;
     data: {
-        type: 'NODE' | 'START' | 'GROUP' | 'END';
+        type: 'NODE';
         name: string;
         [x: string]: any;
     };

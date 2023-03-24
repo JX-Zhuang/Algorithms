@@ -1,54 +1,73 @@
 import { Data, Node, Edge } from './type';
 import data1 from './data1';
+import data2 from './data2';
+import data3 from './data3';
 import data4 from './data4';
-import data5 from './data5';
+import data6 from './data6';
+import data7 from './data7';
+import data8 from './data8';
+import data9 from './data9';
 const checkCycle = (data: Data[]) => {
-    const noCycle: Set<Node> = new Set();
-    const visited: Set<Node> = new Set();
-    const root = data.find(item => item.data.type === 'START') as Node;
+    const checked: Set<string> = new Set();
     const edges: Map<string, Edge> = new Map(), nodes: Map<string, Node> = new Map();
-    const idMapTargetNodes: Map<string, Node[]> = new Map();
-    for (const item of data) {
-        const { id } = item;
-        if (item.data.type === 'EDGE') {
-            edges.set(id, item as Edge);
-        } else {
-            nodes.set(id, item as Node);
-        }
-    }
-    for (const [id, edge] of edges) {
-        const { source, target } = edge;
-        const sourceId = source.cell, targetId = target.cell;
-        if (nodes.has(sourceId) && nodes.has(targetId)) {
-            const targetNodes = idMapTargetNodes.get(sourceId);
-            if (Array.isArray(targetNodes)) {
-                targetNodes.push(nodes.get(targetId) as Node);
+    const neighbours: Map<string, Node[]> = new Map();
+    const initGraph = () => {
+        for (const item of data) {
+            const { id } = item;
+            if (item.data.type === 'EDGE') {
+                edges.set(id, item as Edge);
             } else {
-                idMapTargetNodes.set(sourceId, [nodes.get(targetId) as Node]);
+                nodes.set(id, item as Node);
             }
         }
-    }
-    const hasCycle = (node: Node, visited: Set<Node>) => {
+    };
+    const initTargetNodes = () => {
+        for (const [id, edge] of edges) {
+            const { source, target } = edge;
+            const sourceId = source.cell, targetId = target.cell;
+            if (nodes.has(sourceId) && nodes.has(targetId)) {
+                const targetNodes = neighbours.get(sourceId);
+                if (Array.isArray(targetNodes)) {
+                    targetNodes.push(nodes.get(targetId) as Node);
+                } else {
+                    neighbours.set(sourceId, [nodes.get(targetId) as Node]);
+                }
+            }
+        }
+    };
+    const hasCycle = (node: Node) => {
         const { id } = node;
-        const targetNodes = idMapTargetNodes.get(id) || [];
-        while (targetNodes.length != 0) {
-            const currentNode = targetNodes.shift() as Node;
-            if (visited.has(currentNode)) return true;
-            const nodes = idMapTargetNodes.get(currentNode.id) || [];
-            if (nodes.length === 0) {
-                visited.clear();
-            } else {
-                nodes.forEach(item => {
-                    targetNodes.push(item);
-                });
-                visited.add(currentNode);
+        if (checked.has(id)) return false;
+        const visited: Set<string> = new Set(), parentId: Set<string> = new Set();
+        const queue = [id];
+        while (queue.length) {
+            const id = queue.shift() as string;
+            const currentNeighbours = neighbours.get(id) || [];
+            if (currentNeighbours.length !== 0) parentId.add(id);
+            for (const neighbour of currentNeighbours) {
+                queue.push(neighbour.id);
+                if (parentId.has(neighbour.id)) return true;
             }
+            visited.add(id);
         }
         return false;
     };
-    if (root === undefined) return false;
-    return hasCycle(root, visited);
+    const execute = () => {
+        for (const [id, node] of nodes) {
+            if (hasCycle(node)) return true;
+            checked.add(id);
+        }
+        return false;
+    };
+    initGraph();
+    initTargetNodes();
+    return execute();
 };
-console.log(checkCycle(data1));
-console.log(checkCycle(data4));
-console.log(checkCycle(data5));
+console.log(checkCycle(data1)); //true
+console.log(checkCycle(data2)); //false
+console.log(checkCycle(data3)); //false
+console.log(checkCycle(data4)); //true
+console.log(checkCycle(data6)); //true
+console.log(checkCycle(data7)); //false
+console.log(checkCycle(data8)); //false
+console.log(checkCycle(data9)); //true
