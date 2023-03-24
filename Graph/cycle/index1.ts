@@ -1,6 +1,7 @@
 import { Data, Node, Edge } from './type';
 import data1 from './data1';
 import data4 from './data4';
+import data5 from './data5';
 const checkCycle = (data: Data[]) => {
     const noCycle: Set<Node> = new Set();
     const visited: Set<Node> = new Set();
@@ -34,17 +35,20 @@ const checkCycle = (data: Data[]) => {
             const currentNode = targetNodes.shift() as Node;
             if (visited.has(currentNode)) return true;
             const nodes = idMapTargetNodes.get(currentNode.id) || [];
-            nodes.forEach(item => {
-                targetNodes.push(item);
-            });
-            visited.add(currentNode);
+            if (nodes.length === 0) {
+                visited.clear();
+            } else {
+                nodes.forEach(item => {
+                    targetNodes.push(item);
+                });
+                visited.add(currentNode);
+            }
         }
         return false;
     };
     if (root === undefined) return false;
     return hasCycle(root, visited);
 };
-console.time('test');
 console.log(checkCycle(data1));
 console.log(checkCycle(data4));
-console.timeEnd('test');
+console.log(checkCycle(data5));
