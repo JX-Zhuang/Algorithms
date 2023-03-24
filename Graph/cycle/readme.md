@@ -200,7 +200,7 @@ const initTargetNodes = () => {
 ## 总结
 * 要掌握常见的数据结构与算法，本例中用到了图、深度优先遍历。
 * 掌握数据结构与算法，不只是为了面试，更重要的是，不要因为数据结构与算法阻碍了日常的开发和职业的发展。
-### 源码
+## 源码
 * [递归](https://github.com/JX-Zhuang/Algorithms/blob/master/Graph/cycle/recursion.ts)
 * [循环](https://github.com/JX-Zhuang/Algorithms/blob/master/Graph/cycle/index.ts)
 * [原文](https://github.com/JX-Zhuang/Algorithms/blob/master/Graph/cycle/readme.md)
