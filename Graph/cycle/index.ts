@@ -35,25 +35,30 @@ const checkCycle = (data: Data[]) => {
             }
         }
     };
-    const hasCycle = (node: Node, visited: Set<Node>) => {
-        if (checked.has(node.id)) return false;
-        if (visited.has(node)) return true;
-        visited.add(node);
+    const hasCycle = (node: Node) => {
         const { id } = node;
-        const targetNodes = idMapTargetNodes.get(id);
-        if (Array.isArray(targetNodes)) {
-            for (const item of targetNodes) {
-                if (hasCycle(item, visited)) return true;
+        if (checked.has(id)) return false;
+        const stack = [id];
+        const visited: Set<string> = new Set();
+        visited.add(id);
+        while (stack.length > 0) {
+            const lastId = stack[stack.length - 1];
+            const targetNodes = idMapTargetNodes.get(lastId) || [];
+            if (targetNodes.length > 0) {
+                const { id } = targetNodes.pop() as Node;
+                if (visited.has(id)) return true;
+                stack.push(id);
+                visited.add(id);
+            } else {
+                stack.pop();
+                visited.delete(lastId);
             }
         }
-        checked.add(node.id);
-        visited.delete(node);
         return false;
     };
     const execute = () => {
-        const visited: Set<Node> = new Set();
         for (const [id, node] of nodes) {
-            if (hasCycle(node, visited)) return true;
+            if (hasCycle(node)) return true;
             checked.add(id);
         }
         return false;
@@ -62,11 +67,11 @@ const checkCycle = (data: Data[]) => {
     initTargetNodes();
     return execute();
 };
-console.log(checkCycle(data1));
-console.log(checkCycle(data2));
-console.log(checkCycle(data3));
-console.log(checkCycle(data4));
-console.log(checkCycle(data6));
-console.log(checkCycle(data7));
-console.log(checkCycle(data8));
-console.log(checkCycle(data9));
+console.log(checkCycle(data1)); //true
+console.log(checkCycle(data2)); //false
+console.log(checkCycle(data3)); //false
+console.log(checkCycle(data4)); //true
+console.log(checkCycle(data6)); //true
+console.log(checkCycle(data7)); //false
+console.log(checkCycle(data8)); //false
+console.log(checkCycle(data9)); //true

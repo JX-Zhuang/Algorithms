@@ -10,7 +10,7 @@ import data9 from './data9';
 const checkCycle = (data: Data[]) => {
     const checked: Set<string> = new Set();
     const edges: Map<string, Edge> = new Map(), nodes: Map<string, Node> = new Map();
-    const neighbours: Map<string, Node[]> = new Map();
+    const idMapTargetNodes: Map<string, Node[]> = new Map();
     const initGraph = () => {
         for (const item of data) {
             const { id } = item;
@@ -26,35 +26,34 @@ const checkCycle = (data: Data[]) => {
             const { source, target } = edge;
             const sourceId = source.cell, targetId = target.cell;
             if (nodes.has(sourceId) && nodes.has(targetId)) {
-                const targetNodes = neighbours.get(sourceId);
+                const targetNodes = idMapTargetNodes.get(sourceId);
                 if (Array.isArray(targetNodes)) {
                     targetNodes.push(nodes.get(targetId) as Node);
                 } else {
-                    neighbours.set(sourceId, [nodes.get(targetId) as Node]);
+                    idMapTargetNodes.set(sourceId, [nodes.get(targetId) as Node]);
                 }
             }
         }
     };
-    const hasCycle = (node: Node) => {
+    const hasCycle = (node: Node, visited: Set<Node>) => {
+        if (checked.has(node.id)) return false;
+        if (visited.has(node)) return true;
+        visited.add(node);
         const { id } = node;
-        if (checked.has(id)) return false;
-        const visited: Set<string> = new Set(), parentId: Set<string> = new Set();
-        const queue = [id];
-        while (queue.length) {
-            const id = queue.shift() as string;
-            const currentNeighbours = neighbours.get(id) || [];
-            if (currentNeighbours.length !== 0) parentId.add(id);
-            for (const neighbour of currentNeighbours) {
-                queue.push(neighbour.id);
-                if (parentId.has(neighbour.id)) return true;
+        const targetNodes = idMapTargetNodes.get(id);
+        if (Array.isArray(targetNodes)) {
+            for (const item of targetNodes) {
+                if (hasCycle(item, visited)) return true;
             }
-            visited.add(id);
         }
+        checked.add(node.id);
+        visited.delete(node);
         return false;
     };
     const execute = () => {
+        const visited: Set<Node> = new Set();
         for (const [id, node] of nodes) {
-            if (hasCycle(node)) return true;
+            if (hasCycle(node, visited)) return true;
             checked.add(id);
         }
         return false;
@@ -63,11 +62,11 @@ const checkCycle = (data: Data[]) => {
     initTargetNodes();
     return execute();
 };
-console.log(checkCycle(data1)); //true
-console.log(checkCycle(data2)); //false
-console.log(checkCycle(data3)); //false
-console.log(checkCycle(data4)); //true
-console.log(checkCycle(data6)); //true
-console.log(checkCycle(data7)); //false
-console.log(checkCycle(data8)); //false
-console.log(checkCycle(data9)); //true
+console.log(checkCycle(data1));
+console.log(checkCycle(data2));
+console.log(checkCycle(data3));
+console.log(checkCycle(data4));
+console.log(checkCycle(data6));
+console.log(checkCycle(data7));
+console.log(checkCycle(data8));
+console.log(checkCycle(data9));
