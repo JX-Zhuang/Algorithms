@@ -1,7 +1,8 @@
 # 图在前端的应用
 * 图是一种常见的数据结构，分为有向图和无向图。图是由边和节点组成的。
 * 在前端开发中，接触到图的场景不算多。常见的有流程、图形可视化等场景。
-### 背景
+* 我们在配置题目流程时遇到了需要判断图是否有环的需求。
+## 背景
 * 简单介绍需求，通过可视化流程配置答题流程，题目与题目之间用线连接，箭头的方向代表下一个题目。回答完当前题目，根据不同的条件，跳到下一题；如果题目流程中有循环，会导致答题流程无法结束，所以需要校验题目的流程中不能有循环。
 * 下面的是有循环，不符合条件
 
@@ -13,7 +14,7 @@
 ![无循环](https://github.com/JX-Zhuang/Algorithms/blob/master/Graph/cycle/imgs/noCycle2.png?raw=true)
 ![无循环](https://github.com/JX-Zhuang/Algorithms/blob/master/Graph/cycle/imgs/noCycle3.png?raw=true)
 ![无循环](https://github.com/JX-Zhuang/Algorithms/blob/master/Graph/cycle/imgs/noCycle4.png?raw=true)
-### 技术方案
+## 技术方案
 * 根据需求，我们把题目的流程配置抽象成有向图，题目是节点，题目之间的连线是边。
 * 需求里的有无循环，最终可以转换成图是否有环的问题。从图的某个节点作为起点，根据边的方向出发跳到下一个节点，最终是否回到起点。如果回到起点，就是有循环、有环，否则是无循环、无环。
 * 去除题目和各种条件等无关的结构，数据结构如下。
@@ -101,7 +102,7 @@ const data: Data[] = [
     1. 获得边的集合和节点的集合。
     2. 根据边的集合和节点的集合，获得每个节点的有向邻居节点的集合。即以每个节点的为起点，通过边连接的下一个节点的集合。例如测试数据`节点1`，通过边`id4`和边`id5`，可以连接`节点2`和`节点3`，所以`节点1`的邻居节点是`节点2`和`节点3`，而`节点2`和`节点3`无有向邻居节点。
     3. 最后根据有向邻居节点的集合，判断是否有环。
-### 具体实现
+## 具体实现
 * 获得边的集合和节点的集合
 ``` ts
 const edges: Map<string, Edge> = new Map(), nodes: Map<string, Node> = new Map();
@@ -195,3 +196,11 @@ const initTargetNodes = () => {
         return false;
     };
     ```
+
+## 总结
+* 要掌握常见的数据结构与算法，本例中用到了图、深度优先遍历。
+* 掌握数据结构与算法，不只是为了面试，更重要的是，不要因为数据结构与算法阻碍了日常的开发和职业的发展。
+### 源码
+* [递归](https://github.com/JX-Zhuang/Algorithms/blob/master/Graph/cycle/recursion.ts)
+* [循环](https://github.com/JX-Zhuang/Algorithms/blob/master/Graph/cycle/index.ts)
+* [原文](https://github.com/JX-Zhuang/Algorithms/blob/master/Graph/cycle/readme.md)
